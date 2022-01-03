@@ -1,4 +1,5 @@
 import { Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
+import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import db from './mongodb.ts';
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import type {Event} from './event.ts'
@@ -31,9 +32,35 @@ const getEvents = async ({ response }: { response: any }) => {
     }
   };
 
-const getSingleEvent = async(ctx: Context) => {
-  
-}
+const getSingleEvent = async ({
+    params,
+    response,
+  }: {
+    params: { id: string };
+    response: any;
+  }) => {
+    // Searches for a particular event in the DB
+    
+    // Get objectId
+    const objectId = params.id
+    const event = await eventCollection.findOne({_id: new Bson.ObjectId(objectId)}, { noCursorTimeout: false});
+    console.log(params.id)
+    // If found, respond with the event. If not, respond with a 404
+    if (event) {
+      response.status = 200;
+      response.body = {
+        success: true,
+        data: event,
+      };
+    } else {
+      response.status = 404;
+      response.body = {
+        success: false,
+        msg: "No event found",
+      };
+    }
+  };
+
 
 const createEvent = async (ctx: Context) => {
     const { title, body } = await ctx.request.body().value;
