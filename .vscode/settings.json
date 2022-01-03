@@ -1,0 +1,7 @@
+{
+    // for vscode to better work with deno 
+    "deno.enable": true,
+    "deno.suggest.imports.hosts": {
+        "https://deno.land": false
+    }
+}
