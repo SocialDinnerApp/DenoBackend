@@ -1,5 +1,6 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import {getEvents, createEvent, getSingleEvent} from './routes.ts';
+import {getEvents, createEvent, getSingleEvent, register} from './routes.ts';
+import { getUsers } from './controllers/users.ts';
 
 const router = new Router();
 
@@ -10,6 +11,8 @@ router
     .get('/events', getEvents)
     .get('/events/:id', getSingleEvent)
     .post('/events', createEvent)
+    .get('/users', getUsers)
+    .post('/user/register', register)
     // .put('/events', updateEvent)
     // .delete('/events/:d', deleteEvent);
 
