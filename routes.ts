@@ -3,6 +3,8 @@ import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import db from './mongodb.ts';
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import type {Event} from './event.ts'
+import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts"
+import UserSchema from './schemas/user.ts'
 
 const eventCollection = db.collection('events')
 
@@ -77,4 +79,21 @@ const createEvent = async (ctx: Context) => {
     console.log(id)
 }
 
-export {getEvents, createEvent, getSingleEvent};
+
+const userCollection = db.collection<UserSchema>('users');
+
+const register = async ({request, response}: Context) => {
+  const {name, email, password} = await request.body().value;
+  
+  const id = await userCollection.insertOne({
+    name,
+    email,
+    password: await bcrypt.hash(password)
+  })
+
+  response.body = await userCollection.findOne({_id: id}, { noCursorTimeout: false});
+}
+
+
+
+export {getEvents, createEvent, getSingleEvent, register};
