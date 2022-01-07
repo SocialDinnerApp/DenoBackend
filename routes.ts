@@ -10,7 +10,7 @@ const eventCollection = db.collection('events')
 
 const getEvents = async ({ response }: { response: any }) => {
     try {
-      // Find all quotes and convert them into an Array
+      // Find all events and convert them into an Array
       const allEvents = await eventCollection.find({}, { noCursorTimeout: false}).toArray();
       console.log(allEvents);
       if (allEvents) {
@@ -94,6 +94,13 @@ const register = async ({request, response}: Context) => {
   response.body = await userCollection.findOne({_id: id}, { noCursorTimeout: false});
 }
 
+const login = async ({request, response}: Context) => {
+  const {email, password} = await request.body().value;
+
+  const user = userCollection.findOne({email}, { noCursorTimeout: false});
+
+  response.body
+}
 
 
 export {getEvents, createEvent, getSingleEvent, register};
