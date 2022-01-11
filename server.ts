@@ -1,5 +1,5 @@
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import {getEvents, createEvent, getSingleEvent, register, login, logout, validateToken, updateEvent} from './routes.ts';
+import {getEvents, createEvent, getSingleEvent, register, login, logout, validateToken} from './routes.ts';
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
 const router = new Router();
