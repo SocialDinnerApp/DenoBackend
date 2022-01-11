@@ -5,6 +5,9 @@ import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import type {Event} from './event.ts'
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts"
 import UserSchema from './schemas/user.ts'
+import { create, verify, decode, validate } from "https://deno.land/x/djwt/mod.ts";
+import key from './test.ts'
+
 
 const eventCollection = db.collection('events')
 
@@ -94,13 +97,107 @@ const register = async ({request, response}: Context) => {
   response.body = await userCollection.findOne({_id: id}, { noCursorTimeout: false});
 }
 
-const login = async ({request, response}: Context) => {
+// Login function ---->
+const login = async ({request, response, cookies}: Context) => {
+
   const {email, password} = await request.body().value;
 
-  const user = userCollection.findOne({email}, { noCursorTimeout: false});
+  const user = await userCollection.findOne({email}, { noCursorTimeout: false});
+  console.log(user)
 
-  response.body
+  if (!user) {
+    response.body = 404;
+    response.body = {
+      message: 'User not found!'
+    };
+    return;
+  }
+
+  console.log(await bcrypt.compare(password, user.password))
+  console.log(user.password)
+  if (!await bcrypt.compare(password, user.password)) {
+    response.body = 401;
+    response.body = {
+      message: 'Incorrect password!'
+    };
+    return;
+
+  }
+
+  const jwt = await create({ alg: "HS512", typ: "JWT" }, { _id: user._id }, key);
+
+  cookies.set('jwt', jwt, {httpOnly: true});
+  
+
+  response.body = {
+    message: 'success',
+    data: jwt
+  };
+
+  //const payload = await verify(jwt, key); // { foo: "bar" }
+  //const [header, payload, signature] = decode(jwt);
 }
 
 
-export {getEvents, createEvent, getSingleEvent, register};
+// const logedUser = async ({response, cookies}: Context) => {
+//   const jwtToken: string = response.headers.get("jwt") || '';
+
+//   if (!jwtToken) {
+//     response.body = 401;
+//     response.body = {
+//       message: 'unauthenticated'
+//     }
+//     return;
+//   }
+
+//   const payload = await verify(jwtToken, key); // { foo: "bar" }
+
+
+//   if (!payload) {
+//     response.body = 401;
+//     response.body = {
+//       message: 'unauthenticated'
+//     }
+//     return;
+//   }
+//   // const objectId = payload._id
+//   // response.body = await userCollection.findOne({_id: new Bson.ObjectId(objectId)}, { noCursorTimeout: false});
+
+
+// }
+
+const validateToken = async (ctx: Context, next: any) => {
+  console.log("Middleware");
+
+  const headers: Headers = ctx.request.headers;
+  const authorization = headers.get('Authorization')
+  if (!authorization) {
+    ctx.response.status = 401;
+    return
+  }
+  const jwt = authorization.split(' ')[1];
+  if (!jwt) {
+    ctx.response.status = 401
+    return;
+  }
+
+  const payload = await verify(jwt, key);
+  if (payload){
+    console.log("success")
+    await next()
+  }
+
+}
+
+
+const logout = async ({response, cookies}: Context) => {
+  cookies.delete('jwt')
+
+  response.body = {
+    message: 'success'
+  }
+}
+
+
+
+export {getEvents, createEvent, getSingleEvent, register, login, logout, validateToken};
