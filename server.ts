@@ -43,6 +43,7 @@ router
             } 
           }        
     })
+    .put('/update/event/:id', validateToken, eventAPI.updateEvent)
     .post('/create/event', validateToken, async (context) => {
               await eventAPI.createEvent(context)
     } )
