@@ -60,5 +60,14 @@ export class EventAPI {
     console.log(id)
   }
 
-    
+  public updateEvent = async ({ params, response, request }: { params: { id: string }; response: any; request:any}) => {
+    // Searches for a particular event in the DB
+    const objectId = params.id
+    const { title, body } = await request.body().value;
+    const updatedEvent = await this.eventCollection.updateOne({_id:  new Bson.ObjectId(objectId) },{ $set: { title, body }});
+    // If found, respond with updating the event. If not, respond with a 404
+    response.status = 200;
+    response.body = updatedEvent
+  };
+  
 }
