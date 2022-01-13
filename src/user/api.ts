@@ -77,8 +77,7 @@ const validateToken = async (ctx: Context, next: any) => {
 
 const logout = async (ctx: Context, response: any) => {
   ctx.cookies.delete('jwt');
-  
-  response.body = {
+  ctx.response.body = {
     message: 'success'
   }
 }
