@@ -16,11 +16,11 @@ const eventAPI = new EventAPI();
 router
     .get('/welcome', (ctx) => {
         ctx.response.body = 'Welcome to Gatsby';
-    })
+    }) 
     .post('/user/login', login)
     .post('/user/register', register)
     .post('/user', validateToken)
-    .get('user/logout', logout)  
+    .post('/user/logout', logout)  
     .get('/allevents', validateToken, async (context) => {
         let result = await eventAPI.getAllEvents();
         context.response.body = result.value;
