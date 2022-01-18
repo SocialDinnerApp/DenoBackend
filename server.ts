@@ -2,7 +2,7 @@ import { Application, Router, Status } from "https://deno.land/x/oak/mod.ts";
 // import {getAllEvents, createEvent, getSingleEvent} from './src/event/routes.ts';
 import {register, login, logout, validateToken} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { EventAPI } from "./src/event/routes.ts";
+import { EventAPI } from "./src/event/api.ts";
 
 export interface TEST {
     name: string; 
@@ -46,7 +46,8 @@ router
     .put('/update/event/:id', validateToken, eventAPI.updateEvent)
     .post('/create/event', validateToken, async (context) => {
               await eventAPI.createEvent(context)
-    } )
+    })
+    .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
 
 
 const app = new Application();
