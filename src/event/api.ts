@@ -1,8 +1,4 @@
-import {
-  Context,
-  helpers,
-  RouterContext,
-} from "https://deno.land/x/oak/mod.ts";
+import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
 import { Bson, Collection } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
 import db from "../mongodb/mongodb.ts";
@@ -65,6 +61,7 @@ export class EventAPI {
       time_dessert,
       city,
       zip_code,
+      fee,
       is_public,
       max_participants,
       registration_deadline,
@@ -94,6 +91,7 @@ export class EventAPI {
       city,
       zip_code,
       is_public,
+      fee,
       max_participants,
       registration_deadline,
       datetime_created: new Date(),
@@ -128,7 +126,6 @@ export class EventAPI {
   };
 
   public getOrganizerEvents = async (ctx: Context) => {
-    let options = {};
 
     const headers: Headers = ctx.request.headers;
 
@@ -160,9 +157,7 @@ export class EventAPI {
     // const organizerId = payload._id
 
     console.log(organizerId);
-    const events = await this.eventCollection
-      .find({ organizer: organizerId }, { noCursorTimeout: false })
-      .toArray();
+    const events = await this.eventCollection.find({ organizer: organizerId }, { noCursorTimeout: false }).toArray();
     console.log(events);
 
     ctx.response.body = {

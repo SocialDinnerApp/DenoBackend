@@ -3,6 +3,8 @@ import { Application, Router, Status } from "https://deno.land/x/oak/mod.ts";
 import {register, login, logout, validateToken} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
+import { API } from "./src/visualization/api.ts";
+
 
 export interface TEST {
     name: string; 
@@ -12,6 +14,8 @@ export interface TEST {
 
 const router = new Router();
 const eventAPI = new EventAPI();
+const api = new API();
+
 
 router
     .get('/welcome', (ctx) => {
@@ -48,6 +52,7 @@ router
               await eventAPI.createEvent(context)
     })
     .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
+    .get('/api/test', api.getAllParticipants)
 
 
 const app = new Application();
@@ -55,7 +60,7 @@ const app = new Application();
 // for the frontend to get the cookie for authentification
 app.use(oakCors({
     credentials: true,
-    origin: /^.+localhost:(1234|3000|8000)$/,
+    origin: '*',
 }))
 
 app.use(router.routes());

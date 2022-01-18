@@ -44,9 +44,9 @@ const login = async ({request, response, cookies}: Context) => {
   console.log(user)
 
   if (!user) {
-    response.body = 404;
+    response.status = 404
     response.body = {
-      message: 'User not found!'
+      message: 'User not found!',
     };
     return;
   }
@@ -54,7 +54,7 @@ const login = async ({request, response, cookies}: Context) => {
   // console.log(await bcrypt.compare(user.password, password))
   // console.log('Password', user.password)
   if (!await bcrypt.compare(password, user.password)) {
-    response.body = 401;
+    response.status = 404
     response.body = {
       message: 'Incorrect password!'
     };
