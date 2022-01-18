@@ -9,22 +9,29 @@ import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts"
 const userCollection = db.collection<UserSchema>('users');
 
 const register = async ({request, response}: Context) => {
-  const {name, email, password} = await request.body().value;
   
-  const id = await userCollection.insertOne({
-    name,
-    email,
-    password: await bcrypt.hash(password)
-  })
-  
-  const user = await userCollection.findOne({_id: id}, { noCursorTimeout: false}) as Partial<UserSchema>;
+  const  {username, email, password, faculty, city, university} = await request.body().value;
 
-  delete user?.password
+  const user = {
+    username,
+    email,
+    password: await bcrypt.hash(password),
+    faculty, 
+    city, 
+    university,
+    datetime_created: new Date(),
+    datetime_updated: new Date()
+  }
+  
+  const id = await userCollection.insertOne(user)
+  const registered_user = await userCollection.findOne({_id: id}, { noCursorTimeout: false}) as Partial<UserSchema>;
+
+  delete registered_user?.password
 
    // register response
    response.body = {
     message: 'success',
-    data: user
+    data: registered_user
    }
 }
 
