@@ -1,4 +1,5 @@
 export interface Event {
+    _id: { $oid: string };
     name: string; 
     description: string;
     organizer: any;

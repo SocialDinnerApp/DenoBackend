@@ -1,4 +1,4 @@
-interface UserSchema {
+interface User {
     _id: { $oid: string };
     username: string;
     email: string;
@@ -10,4 +10,4 @@ interface UserSchema {
     datetime_updated: Date;
 }
 
-export default UserSchema;
+export default User;

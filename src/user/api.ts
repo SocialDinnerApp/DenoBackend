@@ -1,15 +1,16 @@
 import db from '../mongodb/mongodb.ts';
-import UserSchema from '../user/user.ts'
+import User from '../user/user.ts'
 import key from '../../key.ts'
 
 import { Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
 import { create, verify, decode, validate } from "https://deno.land/x/djwt/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts"
 
-const userCollection = db.collection<UserSchema>('users');
+const userCollection = db.collection<User>('users');
 
 const register = async ({request, response}: Context) => {
   
+
   const  {username, email, password, faculty, city, university} = await request.body().value;
 
   const user = {
