@@ -1,6 +1,6 @@
 import db from '../mongodb/mongodb.ts';
 import UserSchema from '../user/user.ts'
-import key from '../key.ts'
+import key from '../../key.ts'
 
 import { Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
 import { create, verify, decode, validate } from "https://deno.land/x/djwt/mod.ts";
@@ -16,8 +16,16 @@ const register = async ({request, response}: Context) => {
     email,
     password: await bcrypt.hash(password)
   })
+  
+  const user = await userCollection.findOne({_id: id}, { noCursorTimeout: false}) as Partial<UserSchema>;
 
-  response.body = await userCollection.findOne({_id: id}, { noCursorTimeout: false});
+  delete user?.password
+
+   // register response
+   response.body = {
+    message: 'success',
+    data: user
+   }
 }
 
 // Login function
@@ -36,8 +44,8 @@ const login = async ({request, response, cookies}: Context) => {
     return;
   }
 
-  console.log(await bcrypt.compare(user.password, password))
-  console.log('Password', user.password)
+  // console.log(await bcrypt.compare(user.password, password))
+  // console.log('Password', user.password)
   if (!await bcrypt.compare(password, user.password)) {
     response.body = 401;
     response.body = {
@@ -49,9 +57,14 @@ const login = async ({request, response, cookies}: Context) => {
   const jwt = await create({ alg: "HS512", typ: "JWT" }, { _id: user._id }, key);
   cookies.set('jwt', jwt, {httpOnly: true});
 
+
+  // login response
   response.body = {
     message: 'success',
-    data: jwt
+    data: {
+      jwt: jwt,
+      organizerId: user._id
+    }
   };
 }
 
