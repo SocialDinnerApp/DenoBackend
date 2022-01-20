@@ -52,7 +52,8 @@ router
               await eventAPI.createEvent(context)
     })
     .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
-    .get('/api/test', api.getAllParticipants)
+    .get('/api/visuals/revenue', api.getAllParticipants)
+    .get('/api/visuals/lastseven', api.lastSevenEvents)
 
 
 const app = new Application();
