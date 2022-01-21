@@ -3,7 +3,7 @@ export interface Event {
     name: string; 
     description: string;
     organizer: any;
-    date: Date;
+    date: string;
     time_starter: string;
     time_main: string;
     time_dessert: string;

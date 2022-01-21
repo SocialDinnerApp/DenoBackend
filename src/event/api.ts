@@ -23,19 +23,36 @@ export class EventAPI {
   eventCollection = db.collection<Event>("events");
 
   // Get Events
-  public async getAllEvents() {
+  public getAllEvents = async (ctx: Context) => {
+
+    const headers: Headers = ctx.request.headers;
+
+    // to make sure that authorization is not null
+    const authorization = headers.get("Authorization");
+    if (!authorization) {
+      ctx.response.status = 401;
+      return;
+    }
+
+    const jwt = authorization.split(" ")[1];
+    const payload = await verify(jwt, key);
+    const organizerId = payload._id;
+
+
     if (!this.eventCollection) {
       return {
         status: ResponseStatus.ERROR,
         value: "Error fetching users from database.",
       };
     }
-    const events = await this.eventCollection.find({}, { noCursorTimeout: false }).toArray();
+    const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).toArray();
     
     // events.forEach(function (user: any) {
     //   delete user._id;
     // });
-    return { status: ResponseStatus.OK, value: events };
+    console.log(events)
+    ctx.response.status = 201;
+    ctx.response.body = events;
   }
 
   public async getSingleEvent(eventId: string) {

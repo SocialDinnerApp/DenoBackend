@@ -25,10 +25,7 @@ router
     .post('/user/register', register)
     .post('/user', validateToken)
     .post('/user/logout', logout)  
-    .get('/allevents', validateToken, async (context) => {
-        let result = await eventAPI.getAllEvents();
-        context.response.body = result.value;
-    })
+    .get('/allevents', validateToken, eventAPI.getAllEvents)
     .get('/event/:id', validateToken, async (context) => {
         if (!context.params.id) {
             context.response.status = Status.BadRequest;
