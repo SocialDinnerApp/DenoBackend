@@ -79,7 +79,6 @@ export class EventAPI {
       city,
       zip_code,
       fee,
-      is_public,
       max_participants,
       registration_deadline,
     } = await ctx.request.body().value;
@@ -107,7 +106,6 @@ export class EventAPI {
       time_dessert,
       city,
       zip_code,
-      is_public,
       fee,
       max_participants,
       registration_deadline,

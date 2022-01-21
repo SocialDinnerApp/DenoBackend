@@ -31,7 +31,9 @@ export class API {
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).toArray();
 
-    let event_revenue: any = []
+    // let event_revenue: any = []
+    let revenue = 0
+    let organizer_revenue: any = []
 
     for (const event of events) {
       let _event = event._id
@@ -39,16 +41,22 @@ export class API {
       const docs = await this.event_participation.aggregate([
           { $match: { eventId:  _event.toString()} },
           { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
+      if(Object.keys(docs).length != 0){
           let count = docs[0].total
-      let revenue = fee*count
-      let dict = {eventId: _event.toString(), value: revenue}
-      event_revenue.push(dict) 
-    }
+          revenue = revenue + fee*count
+        } else {
+        }
+      }
 
+      let dict = {revenue: revenue}
+      organizer_revenue.push(dict)
+
+    console.log(organizer_revenue)
     ctx.response.body = {
-      data: event_revenue
+      data: organizer_revenue
      }
-  }
+    }
+  
 
   public lastSevenEvents = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
@@ -65,9 +73,13 @@ export class API {
     const organizerId = payload._id;
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).sort({datetime_created: -1}).toArray();
-    
-    const last_events = events.slice(0,3)
 
+    let last_events 
+    if(events.length >=8){
+      last_events = events.slice(0,7)
+    }else {
+       last_events = events
+    }
 
     let relevant_information: any = []
 
@@ -78,7 +90,6 @@ export class API {
         { $match: { eventId:  _event.toString()} },
         { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
         if(Object.keys(docs).length != 0){
-          console.log("HIER", docs)
           let count = docs[0].total
           let revenue = fee*count
           let dict = {eventId: _event.toString(), name: event.name, value: revenue}
@@ -86,15 +97,18 @@ export class API {
         } else {
           let dict = {eventId: _event.toString(), name: event.name, value: 0}
           relevant_information.push(dict) 
-        
-      
+      }
     }
 
-
-    ctx.response.body = {
-      data: relevant_information
-     }
-    }
+    // if(!relevant_information){
+      ctx.response.body = {
+        data: relevant_information
+      }
+      //  }
+    // }else {
+      // ctx.response.body = {
+        // data:  "Error: Found no events."
+      //  }
   }
 }
 

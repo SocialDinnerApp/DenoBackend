@@ -10,7 +10,6 @@ export interface Event {
     city: string;
     fee: number;
     zip_code: number;
-    is_public: boolean;
     max_participants: number;
     registration_deadline: string;
     datetime_created: Date;
