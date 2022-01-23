@@ -1,6 +1,6 @@
 import { Application, Router, Status } from "https://deno.land/x/oak/mod.ts";
 // import {getAllEvents, createEvent, getSingleEvent} from './src/event/routes.ts';
-import {register, login, logout, validateToken} from './src/user/api.ts'
+import {register, login, logout, updateUser, validateToken} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
 import { API } from "./src/visualization/api.ts";
@@ -51,6 +51,8 @@ router
     .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
     .get('/api/visuals/revenue', api.getAllParticipants)
     .get('/api/visuals/lastseven', api.lastSevenEvents)
+    .put('/update/user', validateToken, updateUser)
+
 
 
 const app = new Application();
