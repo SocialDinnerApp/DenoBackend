@@ -1,5 +1,5 @@
 import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
-import { Bson, Collection } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
+import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
 import db from "../mongodb/mongodb.ts";
 import { Event } from "./event.ts";

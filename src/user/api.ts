@@ -4,6 +4,7 @@ import key from '../../key.ts'
 
 import { Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
 import { create, verify, decode, validate } from "https://deno.land/x/djwt/mod.ts";
+import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts"
 
 const userCollection = db.collection<User>('users');
@@ -64,13 +65,17 @@ const login = async ({request, response, cookies}: Context) => {
   const jwt = await create({ alg: "HS512", typ: "JWT" }, { _id: user._id }, key);
   cookies.set('jwt', jwt, {httpOnly: true});
 
+  const logged_user = await userCollection.findOne({email}, { noCursorTimeout: false}) as Partial<User>;
+
+  delete logged_user?.password
+
 
   // login response
   response.body = {
     message: 'success',
     data: {
       jwt: jwt,
-      organizerId: user._id
+      organizerId: logged_user
     }
   };
 }
@@ -102,4 +107,31 @@ const logout = async (ctx: Context, response: any) => {
   }
 }
 
-export {register, login, logout, validateToken}
+const updateUser = async (ctx: Context) => {
+  const headers: Headers = ctx.request.headers;
+
+    // to make sure that authorization is not null
+    const authorization = headers.get("Authorization");
+    if (!authorization) {
+      ctx.response.status = 401;
+      return;
+    }
+
+    const jwt = authorization.split(" ")[1];
+    const payload = await verify(jwt, key);
+    const organizerId = payload._id;
+
+    const { username, email, password, city } = await ctx.request.body().value;
+
+    const updatedUser = await userCollection.updateOne(
+      { _id: new Bson.ObjectId(String(organizerId)) },
+      { $set: { username, email, password: await bcrypt.hash(password), city } }
+    );
+
+    const user = await userCollection.findOne({ _id: new Bson.ObjectId(String(organizerId))}, { noCursorTimeout: false})
+    ctx.response.body = {
+      user
+    }
+}
+
+export {register, login, logout, updateUser, validateToken}
