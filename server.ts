@@ -51,6 +51,7 @@ router
     .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
     .get('/api/visuals/revenue', api.getAllParticipants)
     .get('/api/visuals/lastseven', api.lastSevenEvents)
+    .get('/api/visuals/eventinformation/:id', api.eventSpecificInformation)
 
 
 const app = new Application();
