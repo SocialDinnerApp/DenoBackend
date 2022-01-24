@@ -52,7 +52,7 @@ router
     .get('/api/visuals/revenue', api.getAllParticipants)
     .get('/api/visuals/lastseven', api.lastSevenEvents)
     .put('/update/user', validateToken, updateUser)
-
+    .get('/api/visuals/eventinformation/:id', api.eventSpecificInformation)
 
 
 const app = new Application();

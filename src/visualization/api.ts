@@ -1,7 +1,7 @@
-import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
+import { Context } from "https://deno.land/x/oak/mod.ts";
 import { Bson, Collection } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
-import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
-import { parse } from "https://deno.land/std@0.95.0/datetime/mod.ts";
+import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 import db from "../mongodb/mongodb.ts";
 import { Event } from "../event/event.ts";
 import key from "../../key.ts";
@@ -31,7 +31,9 @@ export class API {
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).toArray();
 
-    let event_revenue: any = []
+    // let event_revenue: any = []
+    let revenue = 0
+    let organizer_revenue: any = []
 
     for (const event of events) {
       let _event = event._id
@@ -39,16 +41,21 @@ export class API {
       const docs = await this.event_participation.aggregate([
           { $match: { eventId:  _event.toString()} },
           { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
+      if(Object.keys(docs).length != 0){
           let count = docs[0].total
-      let revenue = fee*count
-      let dict = {eventId: _event.toString(), value: revenue}
-      event_revenue.push(dict) 
-    }
+          revenue = revenue + fee*count
+        } else {
+        }
+      }
+
+      let dict = {revenue: revenue}
+      organizer_revenue.push(dict)
 
     ctx.response.body = {
-      data: event_revenue
+      data: organizer_revenue
      }
-  }
+    }
+  
 
   public lastSevenEvents = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
@@ -65,9 +72,13 @@ export class API {
     const organizerId = payload._id;
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).sort({datetime_created: -1}).toArray();
-    
-    const last_events = events.slice(0,3)
 
+    let last_events 
+    if(events.length >=8){
+      last_events = events.slice(0,7)
+    }else {
+       last_events = events
+    }
 
     let relevant_information: any = []
 
@@ -78,7 +89,6 @@ export class API {
         { $match: { eventId:  _event.toString()} },
         { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
         if(Object.keys(docs).length != 0){
-          console.log("HIER", docs)
           let count = docs[0].total
           let revenue = fee*count
           let dict = {eventId: _event.toString(), name: event.name, value: revenue}
@@ -86,15 +96,52 @@ export class API {
         } else {
           let dict = {eventId: _event.toString(), name: event.name, value: 0}
           relevant_information.push(dict) 
-        
-      
+      }
+    }
+      ctx.response.body = {
+        data: relevant_information
+      }
+
+  }
+  public eventSpecificInformation = async ({params,response}: {params: { id: string }; response: any}) => {
+   
+    let eventId = params.id;
+    const participants = await this.event_participation.find({ eventId: eventId }, { noCursorTimeout: false }).toArray();
+
+    let today = new Date();
+    const newDate = new Date(today);
+    let date_before = new Date(newDate.setDate(newDate.getDate() - 30));
+
+    let participations:any = []
+    let dates:any = []
+
+  
+    for(let count=0; count<30;){
+      var participant_count = 0
+      for(let i=1; i<6; i++){
+        var docs = await this.event_participation.aggregate([
+          { $match: { datetime_created:  format(date_before, "yyyy-MM-dd"), eventId: eventId} },
+          { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
+          if(Object.keys(docs).length != 0){
+            let count = docs[0].total
+            participant_count += count*2
+            date_before = new Date(newDate.setDate(newDate.getDate() + 1));
+          } else {
+            date_before = new Date(newDate.setDate(newDate.getDate() + 1));
+            participant_count +=  0
+          }
+      }
+      count += 5
+      let converted_date = format(date_before, "dd.MM.yyyy")
+      dates.push(converted_date)
+      participations.push(participant_count)
     }
 
-
-    ctx.response.body = {
-      data: relevant_information
-     }
+    response.body = {
+      participations: participations, 
+      dates: dates
     }
   }
+
 }
 
