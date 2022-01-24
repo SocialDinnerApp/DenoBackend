@@ -1,7 +1,6 @@
-import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
+import { Context } from "https://deno.land/x/oak/mod.ts";
 import { Bson, Collection } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
-import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
-import { parse } from "https://deno.land/std@0.95.0/datetime/mod.ts";
+import { verify } from "https://deno.land/x/djwt/mod.ts";
 import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 import db from "../mongodb/mongodb.ts";
 import { Event } from "../event/event.ts";
@@ -52,7 +51,6 @@ export class API {
       let dict = {revenue: revenue}
       organizer_revenue.push(dict)
 
-    console.log(organizer_revenue)
     ctx.response.body = {
       data: organizer_revenue
      }
@@ -114,7 +112,10 @@ export class API {
     const newDate = new Date(today);
     let date_before = new Date(newDate.setDate(newDate.getDate() - 30));
 
-    let test_liste:any = []
+    let participations:any = []
+    let dates:any = []
+
+  
     for(let count=0; count<30;){
       var participant_count = 0
       for(let i=1; i<6; i++){
@@ -123,7 +124,7 @@ export class API {
           { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
           if(Object.keys(docs).length != 0){
             let count = docs[0].total
-            participant_count += count
+            participant_count += count*2
             date_before = new Date(newDate.setDate(newDate.getDate() + 1));
           } else {
             date_before = new Date(newDate.setDate(newDate.getDate() + 1));
@@ -131,10 +132,15 @@ export class API {
           }
       }
       count += 5
-      console.log("Datum:", date_before)
-      test_liste.push(participant_count)
+      let converted_date = format(date_before, "dd.MM.yyyy")
+      dates.push(converted_date)
+      participations.push(participant_count)
     }
 
+    response.body = {
+      participations: participations, 
+      dates: dates
+    }
   }
 
 }
