@@ -65,13 +65,17 @@ const login = async ({request, response, cookies}: Context) => {
   const jwt = await create({ alg: "HS512", typ: "JWT" }, { _id: user._id }, key);
   cookies.set('jwt', jwt, {httpOnly: true});
 
+  const logged_user = await userCollection.findOne({email}, { noCursorTimeout: false}) as Partial<User>;
+
+  delete logged_user?.password
+
 
   // login response
   response.body = {
     message: 'success',
     data: {
       jwt: jwt,
-      organizerId: user._id
+      organizerId: logged_user
     }
   };
 }
@@ -119,13 +123,9 @@ const updateUser = async (ctx: Context) => {
 
     const { username, email, password, city } = await ctx.request.body().value;
 
-    if(password){
-      
-    }
-
     const updatedUser = await userCollection.updateOne(
       { _id: new Bson.ObjectId(String(organizerId)) },
-      { $set: { username, email, password, city } }
+      { $set: { username, email, password: await bcrypt.hash(password), city } }
     );
 
     const user = await userCollection.findOne({ _id: new Bson.ObjectId(String(organizerId))}, { noCursorTimeout: false})
