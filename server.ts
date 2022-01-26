@@ -26,28 +26,9 @@ router
     .post('/user', validateToken)
     .post('/user/logout', logout)  
     .get('/allevents', validateToken, eventAPI.getAllEvents)
-    .get('/event/:id', validateToken, async (context) => {
-        if (!context.params.id) {
-            context.response.status = Status.BadRequest;
-            context.response.body = "Invalid parameters.";
-          } else {
-            let objectId = context.params.id;
-            let result = await eventAPI.getSingleEvent(objectId);
-            if(result.status == 404){
-                context.response.body = {
-                    success: false,
-            }} else {
-            context.response.body = {
-                success: true,
-                data: result
-             }
-            } 
-          }        
-    })
+    .get('/event/:id', eventAPI.getSingleEvent)
     .put('/update/event/:id', validateToken, eventAPI.updateEvent)
-    .post('/create/event', validateToken, async (context) => {
-              await eventAPI.createEvent(context)
-    })
+    .post('/create/event', eventAPI.createEvent)
     .get('/myevents', validateToken, eventAPI.getOrganizerEvents)
     .get('/api/visuals/revenue', api.getAllParticipants)
     .get('/api/visuals/lastseven', api.lastSevenEvents)

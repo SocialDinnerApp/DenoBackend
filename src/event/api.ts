@@ -54,21 +54,25 @@ export class EventAPI {
     ctx.response.status = 201;
     ctx.response.body = events;
   }
+  
+  public getSingleEvent = async ({params,response}: {params: { id: string }; response: any}) => {
 
-  public async getSingleEvent(eventId: string) {
-    const event = await this.eventCollection.findOne(
-      { _id: new Bson.ObjectId(eventId) },
-      { noCursorTimeout: false }
-    );
+    const objectId = params.id;
+    console.log(objectId)
+    
+    const event = await this.eventCollection.findOne( { _id: new Bson.ObjectId(objectId) }, { noCursorTimeout: false });
+    console.log(event)
 
     if (!event) {
       return { status: 404, value: "Error: Event not found." };
     } else {
-      return { status: ResponseStatus.OK, value: event };
+      response.status = ResponseStatus.OK
+      response.body = event
     }
   }
 
   public createEvent = async (ctx: Context) => {
+
     const {
       name,
       description,
@@ -119,15 +123,7 @@ export class EventAPI {
     ctx.response.body = event;
   };
 
-  public updateEvent = async ({
-    params,
-    response,
-    request,
-  }: {
-    params: { id: string };
-    response: any;
-    request: any;
-  }) => {
+  public updateEvent = async ({params,response,request,}: {params: { id: string }; response: any; request: any; }) => {
     // Searches for a particular event in the DB
     const objectId = params.id;
     const { title, body } = await request.body().value;
@@ -154,22 +150,6 @@ export class EventAPI {
     const jwt = authorization.split(" ")[1];
     const payload = await verify(jwt, key);
     const organizerId = payload._id;
-    // console.log(organizerId)
-
-    //user._id.toString()
-
-    // to search param
-    // const searchParam = await ctx.request.url.searchParams.get('s');
-
-    // if (searchParam) {
-    //   options = {
-    //     title: new RegExp(searchParam.toString(), 'i')
-    //   }
-    // }
-
-    // const jwt = authorization.split(' ')[1];
-    // const payload = await verify(jwt, key);
-    // const organizerId = payload._id
 
     console.log(organizerId);
     const events = await this.eventCollection.find({ organizer: organizerId }, { noCursorTimeout: false }).toArray();

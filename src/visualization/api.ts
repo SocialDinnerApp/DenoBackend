@@ -122,6 +122,7 @@ export class API {
         var docs = await this.event_participation.aggregate([
           { $match: { datetime_created:  format(date_before, "yyyy-MM-dd"), eventId: eventId} },
           { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
+          console.log(date_before)
           if(Object.keys(docs).length != 0){
             let count = docs[0].total
             participant_count += count*2
