@@ -4,11 +4,18 @@ import { OrganizerAPI} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
 import { API } from "./src/visualization/api.ts";
+import { parse } from 'https://deno.land/std/flags/mod.ts'
 
 const router = new Router();
 const eventAPI = new EventAPI();
 const organizerAPI = new OrganizerAPI();
 const api = new API();
+
+const { args } = Deno;
+const DEFAULT_PORT = 3000;
+const PORT = parse(args).port;
+
+console.log(Deno.env.get("DATABASE_PASSWORD"))
 
 router
     .post('/organizer/login', organizerAPI.login)
@@ -36,5 +43,5 @@ app.use(oakCors({
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen({port: 8000});
+app.listen({ port: PORT ?? DEFAULT_PORT });
 console.log("Server is running")
