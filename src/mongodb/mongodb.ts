@@ -5,7 +5,7 @@ const client = new MongoClient();
   
 // Connect using srv url + password 
 await client.connect(
-    `mongodb+srv://deno:${password}@denobackend.vgbvb.mongodb.net/DenoBackend?authMechanism=SCRAM-SHA-1`,
+    `mongodb+srv://deno:testpasswort@denobackend.vgbvb.mongodb.net/DenoBackend?authMechanism=SCRAM-SHA-1`,
   );
 
 const db = client.database('notes');
