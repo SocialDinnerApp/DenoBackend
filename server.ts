@@ -1,29 +1,29 @@
 import { Application, Router, Status } from "https://deno.land/x/oak/mod.ts";
 // import {getAllEvents, createEvent, getSingleEvent} from './src/event/routes.ts';
-import {register, login, logout, updateUser, validateToken, userInformation} from './src/user/api.ts'
+import { OrganizerAPI} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
 import { API } from "./src/visualization/api.ts";
 
 const router = new Router();
 const eventAPI = new EventAPI();
+const organizerAPI = new OrganizerAPI();
 const api = new API();
 
 router
-    .post('/organizer/login', login)
-    .post('/organizer/register', register)
-    // to be removed
-    .post('/organizer', validateToken)
-    .post('/organizer/logout', logout)  
-    .get('/organizer/allevents', validateToken, eventAPI.getAllEvents)
+    .post('/organizer/login', organizerAPI.login)
+    .post('/organizer/register', organizerAPI.register)
+    // .post('/organizer', organizerAPI.validateToken)
+    .post('/organizer/logout', organizerAPI.logout)  
+    .get('/organizer/allevents', organizerAPI.validateToken, eventAPI.getAllEvents)
     .get('/organizer/event/:id', eventAPI.getSingleEvent)
-    .put('/organizer/update/event/:id', validateToken, eventAPI.updateEvent)
+    .put('/organizer/update/event/:id', organizerAPI.validateToken, eventAPI.updateEvent)
     .post('/organizer/create/event', eventAPI.createEvent)
-    .put('/organizer', validateToken, updateUser)
-    .get('/organizer', userInformation)
+    .put('/organizer', organizerAPI.validateToken, organizerAPI.updateUser)
+    .get('/organizer', organizerAPI.userInformation)
     .get('/organizer/visuals/revenue', api.getAllParticipants)
-    .get('/organizer/visuals/partsingleevent/:id', api.partSingleEvent)
     .get('/organizer/visuals/partlastsevenevents', api.partLastSevenEvents)
+    .get('/organizer/visuals/partsingleevent/:id', api.partSingleEvent)
 
 const app = new Application();
 
