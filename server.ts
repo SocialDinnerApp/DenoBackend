@@ -19,12 +19,10 @@ router
     .get('/organizer/event/:id', eventAPI.getSingleEvent)
     .put('/organizer/update/event/:id', validateToken, eventAPI.updateEvent)
     .post('/organizer/create/event', eventAPI.createEvent)
-    // to be removes 
-    .get('/organizer/myevents', validateToken, eventAPI.getOrganizerEvents)
     .put('/organizer', validateToken, updateUser)
     .get('/organizer', userInformation)
-    .get('/organizer/visuals/partsingleevent/:id', api.partSingleEvent)
     .get('/organizer/visuals/revenue', api.getAllParticipants)
+    .get('/organizer/visuals/partsingleevent/:id', api.partSingleEvent)
     .get('/organizer/visuals/partlastsevenevents', api.partLastSevenEvents)
 
 const app = new Application();

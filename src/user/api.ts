@@ -120,10 +120,17 @@ const updateUser = async (ctx: Context) => {
 
     const { username, email, password, city } = await ctx.request.body().value;
 
-    const updatedUser = await userCollection.updateOne(
-      { _id: new Bson.ObjectId(String(organizerId)) },
-      { $set: { username, email, password: await bcrypt.hash(password), city } }
-    );
+    if(!password){
+      const updatedUser = await userCollection.updateOne(
+        { _id: new Bson.ObjectId(String(organizerId)) },
+        { $set: { username, email, city } }
+      );
+    } else {
+      const updatedUser = await userCollection.updateOne(
+        { _id: new Bson.ObjectId(String(organizerId)) },
+        { $set: { username, email, password: await bcrypt.hash(password), city } }
+      );
+    }
 
     const user = await userCollection.findOne({ _id: new Bson.ObjectId(String(organizerId))}, { noCursorTimeout: false})
     ctx.response.body = {

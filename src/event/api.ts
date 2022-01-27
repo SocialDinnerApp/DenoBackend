@@ -28,7 +28,7 @@ export class EventAPI {
     const organizerId = payload._id;
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).toArray();
-    console.log(events.length)
+    
     if (events.length == 0) {
         ctx.response.status = 404,
         ctx.response.body = "Error: no events found."
@@ -108,39 +108,18 @@ export class EventAPI {
     ctx.response.body = event;
   };
 
+  // update event information
   public updateEvent = async ({params,response,request,}: {params: { id: string }; response: any; request: any; }) => {
-    // Searches for a particular event in the DB
+
     const objectId = params.id;
     const { title, body } = await request.body().value;
+    
     const updatedEvent = await this.eventCollection.updateOne(
       { _id: new Bson.ObjectId(objectId) },
       { $set: { title, body } }
     );
-    // If found, respond with updating the event. If not, respond with a 404
+
     response.status = 200;
     response.body = updatedEvent;
-  };
-
-  public getOrganizerEvents = async (ctx: Context) => {
-
-    const headers: Headers = ctx.request.headers;
-
-    // to make sure that authorization is not null
-    const authorization = headers.get("Authorization");
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
-
-    const events = await this.eventCollection.find({ organizer: organizerId }, { noCursorTimeout: false }).toArray();
-
-    ctx.response.body = {
-      message: "success",
-      data: events,
-    };
   };
 }
