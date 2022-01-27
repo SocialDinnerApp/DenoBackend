@@ -1,5 +1,5 @@
 import { MongoClient } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
-import  password  from '../../password.ts'
+// import  password  from '../../password.ts'
 
 const client = new MongoClient();
   
