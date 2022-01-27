@@ -30,6 +30,18 @@ __Unit Tests with Deno__<br>
 __Postman__<br>
 * [Postman API tutorial for beginners](https://www.youtube.com/watch?v=FjgYtQK_zLE&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=4)<br>
 
+## Done
+ - [x] setting up mongodb connection
+ - [x] implemented CRUD operations for organizer <br> & created suitable responses for the frontend
+ - [x] implemented functionaly to aggregate database data
+ - [x] creating and verifying JSON Web Tokens to restrict unauthorized access
+ - [x] login/register & logout functionality
+ - [x] working with interfaces in TypeScript
+ - [x] hashing passwords with bcrypt
+ - [x] implemented helper functions to fulfill the __DRY-Principle__
+ - [x] implemented a few unit-tests
+ - [x] deployed backend to heroku
+
 ## Challenges
 
 * facing issues by running deno, see: [StackOverflow - Question](https://stackoverflow.com/questions/70856292/the-server-is-taking-too-long-to-respond-with-the-deno-run-command/70856322#70856322)<br>
@@ -42,7 +54,7 @@ __Postman__<br>
 
 * ~~for debugging in deno a lot of patience is needed~~ <br>
 * after implementing authentification many errors occur because of missing baerer tokens <br>
-* how to write simple unit tests funktionen<br>
+* how to write simple unit-tests <br>
 
 
 
