@@ -4,7 +4,7 @@ import key from "../../key.ts";
 
 export class GetId {
 
-    // return objectId of organizer
+    // return specific objectId of organizer
     public async objectId(headers: Headers, ctx: Context) {
 
         // make sure that authorization is not null
