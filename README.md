@@ -10,7 +10,7 @@ __bcrypt:__ https://deno.land/x/bcrypt@v0.3.0 <br>
 __testing:__ https://deno.land/std@0.97.0/testing
 
 ## YouTube Videos & Websites <br>
-__Deno & Typescript basics__ <br>
+__Deno & Typescript__ <br>
 * [Deno Crash Course](https://www.youtube.com/watch?v=NHHhiqwcfRM&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=17)<br>
 * [RestAPI with Deno](https://www.youtube.com/watch?v=Hi1Xen0H_HI&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=1)<br>
 * [Deno & MongoDB REST API Tutorial with Oak Framework](https://www.youtube.com/watch?v=TMPBEkfIPWk&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=2)<br>
@@ -31,11 +31,16 @@ __Postman__<br>
 * [Postman API tutorial for beginners](https://www.youtube.com/watch?v=FjgYtQK_zLE&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=4)<br>
 
 ## Done
+ - [x] Developed complete backend (TypeScript) including following routes:
+      - login, register, logout functionality
+      - getAllEvents --> for a particular registered organizer
+      - getSingleEvent --> to show event information in the frontend
+      - validateToken --> to check if the organizer's token exists & is not expired
+      - implemented basic CRUD operations for organizer
  - [x] setting up mongodb connection
- - [x] implemented CRUD operations for organizer <br> & created suitable responses for the frontend
+ - [x] created suitable responses for the frontend
  - [x] implemented functionaly to aggregate database data
  - [x] creating and verifying JSON Web Tokens to restrict unauthorized access
- - [x] login/register & logout functionality
  - [x] working with interfaces in TypeScript
  - [x] hashing passwords with bcrypt
  - [x] implemented helper functions to fulfill the __DRY-Principle__
