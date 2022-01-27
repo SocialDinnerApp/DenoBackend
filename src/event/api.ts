@@ -1,9 +1,7 @@
-import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
+import {Context} from "https://deno.land/x/oak/mod.ts";
 import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
-import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
-import db from "../mongodb/mongodb.ts";
+import db from "../../mongodb/mongodb.ts";
 import { Event } from "./event.ts";
-import key from "../../key.ts";
 import { GetId } from '../helper/get_objectId.ts'
 
 export class EventAPI {
@@ -14,7 +12,7 @@ export class EventAPI {
   // helper class
   getId = new GetId()
   
-  // get all events corressponding to particular user 
+  // get all events corresponding to particular user 
   public getAllEvents = async (ctx: Context) => {
 
     const headers: Headers = ctx.request.headers;
@@ -29,12 +27,9 @@ export class EventAPI {
       ctx.response.status = 201;
       ctx.response.body = events;
     }
-    
-    // events.forEach(function (user: any) {
-    //   delete user._id;
-    // });
   }
   
+  // get one event by its objectId
   public getSingleEvent = async ({params,response}: {params: { id: string }; response: any}) => {
 
     const objectId = params.id;
@@ -49,6 +44,7 @@ export class EventAPI {
     }
   }
 
+  // create one event 
   public createEvent = async (ctx: Context) => {
 
     const {

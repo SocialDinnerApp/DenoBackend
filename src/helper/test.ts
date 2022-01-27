@@ -5,7 +5,7 @@ import db from "../mongodb/mongodb.ts";
 
 const event_participation = db.collection("event_participation");
 
-// Tests for the mongoDB Iterator
+// Tests for the mongoDB iterator helper function
 
 Deno.test("Test iterator for 5 day intervals for the last 30 days", async () => {
 
