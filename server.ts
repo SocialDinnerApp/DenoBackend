@@ -1,5 +1,4 @@
-import { Application, Router, Status } from "https://deno.land/x/oak/mod.ts";
-// import {getAllEvents, createEvent, getSingleEvent} from './src/event/routes.ts';
+import { Application, Router} from "https://deno.land/x/oak/mod.ts";
 import { OrganizerAPI} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
@@ -17,10 +16,10 @@ const PORT = parse(args).port;
 
 console.log(Deno.env.get("DATABASE_PASSWORD"))
 
+// middleware router: enables routing based on pathname of a request
 router
     .post('/organizer/login', organizerAPI.login)
     .post('/organizer/register', organizerAPI.register)
-    // .post('/organizer', organizerAPI.validateToken)
     .post('/organizer/logout', organizerAPI.logout)  
     .get('/organizer/allevents', eventAPI.getAllEvents)
     .get('/organizer/event/:id', eventAPI.getSingleEvent)

@@ -6,7 +6,7 @@ config({ export: true });
 
 const client = new MongoClient();
   
-// Connect using srv url + password 
+// connect using srv url + password 
 await client.connect(
     `mongodb+srv://deno:${Deno.env.get("API_PASSWORD")}@denobackend.vgbvb.mongodb.net/DenoBackend?authMechanism=SCRAM-SHA-1`,
   );

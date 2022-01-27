@@ -1,4 +1,4 @@
-import db from "../mongodb/mongodb.ts";
+import db from "../../mongodb/mongodb.ts";
 import User from "../user/user.ts";
 import key from "../../key.ts";
 
@@ -47,7 +47,7 @@ export class OrganizerAPI {
     };
   };
 
-  // Login function
+  // login function
   public login = async ({ request, response, cookies }: Context) => {
     const { email, password } = await request.body().value;
 
@@ -98,7 +98,7 @@ export class OrganizerAPI {
     };
   };
 
-  // validate jwt token to prevent unauthorised requests
+  // validate jwt token to prevent unauthorized requests
   public validateToken = async (ctx: Context, next: any) => {
 
     const headers: Headers = ctx.request.headers;
@@ -115,12 +115,11 @@ export class OrganizerAPI {
 
     const payload = await verify(jwt, key);
     if (payload) {
-      console.log("success");
       await next();
     }
   };
 
-  // logout user - delete jwt token
+  // logout function - delete jwt token
   public logout = async (ctx: Context, response: any) => {
     ctx.cookies.delete("jwt");
     ctx.response.body = {
@@ -128,7 +127,7 @@ export class OrganizerAPI {
     };
   };
 
-  // update Organizer information
+  // update the organizer's information
   public updateUser = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
 
@@ -165,7 +164,7 @@ export class OrganizerAPI {
     };
   };
 
-  // retrieve organizer Information for profil page
+  // retrieve the organizer's information for the profile page
   public userInformation = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
 

@@ -1,8 +1,7 @@
 import { Context } from "https://deno.land/x/oak/mod.ts";
 import { verify } from "https://deno.land/x/djwt/mod.ts";
-import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 import { Iterator } from '../helper/mongodb_iterator.ts'
-import db from "../mongodb/mongodb.ts";
+import db from "../../mongodb/mongodb.ts";
 import { Event } from "../event/event.ts";
 import key from "../../key.ts";
 
