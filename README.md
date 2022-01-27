@@ -6,7 +6,8 @@ This Deno backend is used for an organizer on Gatsby to create events. <br> It h
 __mongodb:__ https://deno.land/x/mongo@v0.29.0 <br>
 __oak:__ https://deno.land/x/oak@v10.1.1 <br>
 __djwt:__ https://deno.land/x/djwt@v2.4 <br>
-__testing:__ https://deno.land/std@0.97.0/testing/asserts.ts
+__bcrypt:__ https://deno.land/x/bcrypt@v0.3.0 <br>
+__testing:__ https://deno.land/std@0.97.0/testing
 
 ## YouTube Videos & Websites <br>
 __Deno & Typescript basics__ <br>
@@ -35,12 +36,13 @@ __Postman__<br>
 * first time using TypeScript, coming from Python <br>
 * creating and verifying JSON Web Tokens with deno [djwt] <br>
 * writing & trying unit-tests for Rest-API 
+* switching from relational database to document-oriented NoSQL database [mongodb]
 
 ## Learnings<br>
 
-* for debugging in deno a lot of patience is needed <br>
+* ~~for debugging in deno a lot of patience is needed~~ <br>
 * after implementing authentification many errors occur because of missing baerer tokens <br>
-Wie man Tests schreiben kann, deno bietet viele assert funktionen<br>
+* how to write simple unit tests funktionen<br>
 
 
 
