@@ -6,7 +6,7 @@ export class Iterator {
 
     public async mongodbIteratior(step_size: number, start_Date: number, collection: any, id: string) {
 
-        let countArray:any = []
+        let countArray: any = []
         let dates: any = [];
 
         const newDate = new Date(this.today);
@@ -19,7 +19,7 @@ export class Iterator {
               let converted_date = format(date_before, "dd.MM.yyyy");
               dates.push(converted_date)
             }
-            for(let i=1; i<step_size; i++){
+            for(let i=0; i<step_size; i++){
               var docs = await collection.aggregate([
                 { $match: { datetime_created:  format(date_before, "yyyy-MM-dd"), eventId: id} },
                 { $group: { _id: "$name", total: { $sum: 1 } } },]).toArray() as any;
@@ -38,7 +38,7 @@ export class Iterator {
             dates.push(converted_date);
             countArray.push(counter)
           }
-          dates.drop
+          dates.pop();
           return [countArray, dates]
     }
 

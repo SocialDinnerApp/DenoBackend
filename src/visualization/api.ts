@@ -131,46 +131,9 @@ export class API {
       .toArray();
 
       
-    // const iterator = new Iterator()
-    // let [participations, dates] = await iterator.mongodbIteratior(5, 30, this.event_participation, eventId)
-    // console.log("HIER:", participants, dates)
-    let today = new Date();
-    const newDate = new Date(today);
-    let date_before = new Date(newDate.setDate(newDate.getDate() - 30));
-
-    let participations: any = [];
-    let dates: any = [];
-
-    for (let count = 0; count < 30; ) {
-      var participant_count = 0;
-      for (let i = 1; i < 6; i++) {
-        var docs = (await this.event_participation
-          .aggregate([
-            {
-              $match: {
-                datetime_created: format(date_before, "yyyy-MM-dd"),
-                eventId: eventId,
-              },
-            },
-            { $group: { _id: "$name", total: { $sum: 1 } } },
-          ])
-          .toArray()) as any;
-        if (Object.keys(docs).length != 0) {
-          let count = docs[0].total;
-          participant_count += count * 2;
-          date_before = new Date(newDate.setDate(newDate.getDate() + 1));
-        } else {
-          date_before = new Date(newDate.setDate(newDate.getDate() + 1));
-          participant_count += 0;
-        }
-      }
-      count += 5;
-      let converted_date = format(date_before, "dd.MM.yyyy");
-      dates.push(converted_date);
-      participations.push(participant_count);
-    }
-
-
+    const iterator = new Iterator()
+    let [participations, dates] = await iterator.mongodbIteratior(5, 30, this.event_participation, eventId)
+   
     response.body = {
       participations: participations,
       dates: dates
