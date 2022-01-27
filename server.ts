@@ -15,6 +15,8 @@ const { args } = Deno;
 const DEFAULT_PORT = 3000;
 const PORT = parse(args).port;
 
+console.log(Deno.env.get("DATABASE_PASSWORD"))
+
 router
     .post('/organizer/login', organizerAPI.login)
     .post('/organizer/register', organizerAPI.register)
