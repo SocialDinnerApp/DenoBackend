@@ -4,7 +4,7 @@ export class Iterator {
 
     today = new Date();
 
-    public async mongodbIteratior(step_size: number, start_Date: number, collection: any, id: string) {
+    public async mongodbIterator(step_size: number, start_Date: number, collection: any, id: string) {
 
         let countArray: any = []
         let dates: any = [];

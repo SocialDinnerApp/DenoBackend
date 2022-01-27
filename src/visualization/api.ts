@@ -132,7 +132,7 @@ export class API {
 
       
     const iterator = new Iterator()
-    let [participations, dates] = await iterator.mongodbIteratior(5, 30, this.event_participation, eventId)
+    let [participations, dates] = await iterator.mongodbIterator(5, 30, this.event_participation, eventId)
    
     response.body = {
       participations: participations,
