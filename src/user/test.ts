@@ -1,6 +1,6 @@
 
 
-import {register, login, logout, validateToken} from "./api.ts";
+// import {register, login, logout, validateToken} from "./api.ts";
 import { delay } from "https://deno.land/std@0.121.0/async/delay.ts";
 import { assertEquals } from "https://deno.land/std@0.97.0/testing/asserts.ts";
 
