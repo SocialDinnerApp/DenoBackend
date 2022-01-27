@@ -42,7 +42,6 @@ const login = async ({request, response, cookies}: Context) => {
   const {email, password} = await request.body().value;
 
   const user = await userCollection.findOne({email}, { noCursorTimeout: false});
-  console.log(user)
 
   if (!user) {
     response.status = 404
@@ -52,8 +51,6 @@ const login = async ({request, response, cookies}: Context) => {
     return;
   }
 
-  // console.log(await bcrypt.compare(user.password, password))
-  // console.log('Password', user.password)
   if (!await bcrypt.compare(password, user.password)) {
     response.status = 404
     response.body = {

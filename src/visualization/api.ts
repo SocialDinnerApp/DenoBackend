@@ -57,7 +57,7 @@ export class API {
     }
   
 
-  public lastSevenEvents = async (ctx: Context) => {
+  public partLastSevenEvents = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
 
     // to make sure that authorization is not null
@@ -103,7 +103,7 @@ export class API {
       }
 
   }
-  public eventSpecificInformation = async ({params,response}: {params: { id: string }; response: any}) => {
+  public partSingleEvent = async ({params,response}: {params: { id: string }; response: any}) => {
    
     let eventId = params.id;
     const participants = await this.event_participation.find({ eventId: eventId }, { noCursorTimeout: false }).toArray();
