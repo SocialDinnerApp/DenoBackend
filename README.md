@@ -32,14 +32,18 @@ __Postman__<br>
 
 ## Done
  - [x] Developed complete backend (TypeScript) including following routes:
-      - login, register, logout functionality
+      - implemented basic CRUD operations for organizer (e.g. creating events)
+      - login, register, logout functionality for frontend
       - getAllEvents --> for a particular registered organizer
       - getSingleEvent --> to show event information in the frontend
       - validateToken --> to check if the organizer's token exists & is not expired
-      - implemented basic CRUD operations for organizer
+      - database aggregation to receive:<br>
+        - event revenue
+        - participations in a certain timeframe
+        - last seven organizer events including revenue
  - [x] setting up mongodb connection
+ - [x] design implementation of non-relational data-model for all entities & creating testing data
  - [x] created suitable responses for the frontend
- - [x] implemented functionaly to aggregate database data
  - [x] creating and verifying JSON Web Tokens to restrict unauthorized access
  - [x] working with interfaces in TypeScript
  - [x] hashing passwords with bcrypt
@@ -58,8 +62,10 @@ __Postman__<br>
 ## Learnings<br>
 
 * ~~for debugging in deno a lot of patience is needed~~ <br>
-* after implementing authentification many errors occur because of missing baerer tokens <br>
-* how to write simple unit-tests <br>
+* Improved TypeScript skills <br>
+* Improved database knowledge <br>
+* How to write simple unit-tests <br>
+* How to write a deno module and ~~how to publish it on deno.land~~ (pending)<br>
 
 
 
