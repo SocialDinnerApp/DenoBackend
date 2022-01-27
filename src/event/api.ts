@@ -4,31 +4,24 @@ import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
 import db from "../mongodb/mongodb.ts";
 import { Event } from "./event.ts";
 import key from "../../key.ts";
-
+import { GetId } from '../helper/get_objectId.ts'
 
 export class EventAPI {
 
   // mongodb collection
   eventCollection = db.collection<Event>("events");
 
+  // helper class
+  getId = new GetId()
+  
   // get all events corressponding to particular user 
   public getAllEvents = async (ctx: Context) => {
 
     const headers: Headers = ctx.request.headers;
-
-    // make sure that authorization is not null
-    const authorization = headers.get("Authorization");
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
+    const organizerId = await this.getId.objectId(headers, ctx)
 
     const events = await this.eventCollection.find({organizer: organizerId}, { noCursorTimeout: false }).toArray();
-    console.log(events.length)
+    
     if (events.length == 0) {
         ctx.response.status = 404,
         ctx.response.body = "Error: no events found."
@@ -73,17 +66,7 @@ export class EventAPI {
     } = await ctx.request.body().value;
 
     const headers: Headers = ctx.request.headers;
-    const authorization = headers.get("Authorization");
-
-    // to make sure that authorization is not null
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
+    const organizerId = await this.getId.objectId(headers, ctx)
 
     const event = {
       name,
@@ -102,45 +85,23 @@ export class EventAPI {
       datetime_updated: new Date(),
     };
 
-    // const events = await eventCollection.findOne({_id: id}, { noCursorTimeout: false}) as Partial<User>;
     const id = await this.eventCollection.insertOne(event);
     ctx.response.status = 201;
     ctx.response.body = event;
   };
 
+  // update event information
   public updateEvent = async ({params,response,request,}: {params: { id: string }; response: any; request: any; }) => {
-    // Searches for a particular event in the DB
+
     const objectId = params.id;
     const { title, body } = await request.body().value;
+    
     const updatedEvent = await this.eventCollection.updateOne(
       { _id: new Bson.ObjectId(objectId) },
       { $set: { title, body } }
     );
-    // If found, respond with updating the event. If not, respond with a 404
+
     response.status = 200;
     response.body = updatedEvent;
-  };
-
-  public getOrganizerEvents = async (ctx: Context) => {
-
-    const headers: Headers = ctx.request.headers;
-
-    // to make sure that authorization is not null
-    const authorization = headers.get("Authorization");
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
-
-    const events = await this.eventCollection.find({ organizer: organizerId }, { noCursorTimeout: false }).toArray();
-
-    ctx.response.body = {
-      message: "success",
-      data: events,
-    };
   };
 }
