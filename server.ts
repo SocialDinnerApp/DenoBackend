@@ -15,7 +15,7 @@ router
     .post('/organizer/register', organizerAPI.register)
     // .post('/organizer', organizerAPI.validateToken)
     .post('/organizer/logout', organizerAPI.logout)  
-    .get('/organizer/allevents', organizerAPI.validateToken, eventAPI.getAllEvents)
+    .get('/organizer/allevents', eventAPI.getAllEvents)
     .get('/organizer/event/:id', eventAPI.getSingleEvent)
     .put('/organizer/update/event/:id', organizerAPI.validateToken, eventAPI.updateEvent)
     .post('/organizer/create/event', eventAPI.createEvent)

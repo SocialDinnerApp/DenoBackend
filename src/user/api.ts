@@ -6,9 +6,16 @@ import { Context } from "https://deno.land/x/oak/mod.ts";
 import { create, verify } from "https://deno.land/x/djwt/mod.ts";
 import { Bson } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
+import { GetId } from '../helper/get_objectId.ts'
+
 
 export class OrganizerAPI {
+
+  // mongodb collection
   userCollection = db.collection<User>("users");
+
+  // helper class
+  getId = new GetId()
 
   public register = async ({ request, response }: Context) => {
     const { username, email, password, faculty, city, university } =
@@ -125,17 +132,7 @@ export class OrganizerAPI {
   public updateUser = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
 
-    // to make sure that authorization is not null
-    const authorization = headers.get("Authorization");
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    // retriev jwt authentification
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
+    const organizerId = await this.getId.objectId(headers, ctx)
 
     const { username, email, password, city } = await ctx.request.body().value;
 
@@ -172,16 +169,7 @@ export class OrganizerAPI {
   public userInformation = async (ctx: Context) => {
     const headers: Headers = ctx.request.headers;
 
-    // to make sure that authorization is not null
-    const authorization = headers.get("Authorization");
-    if (!authorization) {
-      ctx.response.status = 401;
-      return;
-    }
-
-    const jwt = authorization.split(" ")[1];
-    const payload = await verify(jwt, key);
-    const organizerId = payload._id;
+    const organizerId = await this.getId.objectId(headers, ctx)
 
     const user = await this.userCollection
       .find(

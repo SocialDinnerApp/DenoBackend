@@ -1,7 +1,7 @@
 import { Context } from "https://deno.land/x/oak/mod.ts";
-import { Bson, Collection } from "https://deno.land/x/mongo@v0.29.0/mod.ts";
 import { verify } from "https://deno.land/x/djwt/mod.ts";
 import { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
+import { Iterator } from '../helper/mongodb_iterator.ts'
 import db from "../mongodb/mongodb.ts";
 import { Event } from "../event/event.ts";
 import key from "../../key.ts";
@@ -130,6 +130,10 @@ export class API {
       .find({ eventId: eventId }, { noCursorTimeout: false })
       .toArray();
 
+      
+    // const iterator = new Iterator()
+    // let [participations, dates] = await iterator.mongodbIteratior(5, 30, this.event_participation, eventId)
+    // console.log("HIER:", participants, dates)
     let today = new Date();
     const newDate = new Date(today);
     let date_before = new Date(newDate.setDate(newDate.getDate() - 30));
@@ -166,9 +170,10 @@ export class API {
       participations.push(participant_count);
     }
 
+
     response.body = {
       participations: participations,
-      dates: dates,
+      dates: dates
     };
   };
 }
