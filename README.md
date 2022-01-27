@@ -30,7 +30,7 @@ __Unit Tests with Deno__<br>
 __Postman__<br>
 * [Postman API tutorial for beginners](https://www.youtube.com/watch?v=FjgYtQK_zLE&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=4)<br>
 
-## Done
+### Done
  - [x] Developed complete backend (TypeScript) including following routes:
       - implemented basic CRUD operations for organizer (e.g. creating events)
       - login, register, logout functionality for frontend
