@@ -4,12 +4,16 @@ import { OrganizerAPI} from './src/user/api.ts'
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { EventAPI } from "./src/event/api.ts";
 import { API } from "./src/visualization/api.ts";
-import * as flags from 'https://deno.land/std/flags/mod.ts';
+import { parse } from 'https://deno.land/std/flags/mod.ts'
 
 const router = new Router();
 const eventAPI = new EventAPI();
 const organizerAPI = new OrganizerAPI();
 const api = new API();
+
+const default_port = 8000
+const { args } = Deno
+const args_port= parse(args).port
 
 router
     .post('/organizer/login', organizerAPI.login)
@@ -28,11 +32,6 @@ router
 
 const app = new Application();
 
-const {args, exit} = Deno;
-const DEFAULT_PORT = 8000;
-const argPort = flags.parse(args).port;
-const port = argPort ? Number(argPort) : DEFAULT_PORT;
-
 // for the frontend to get the cookie for authentification
 app.use(oakCors({
     credentials: true,
@@ -42,5 +41,5 @@ app.use(oakCors({
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen({port: 8000});
+app.listen({port: args_port ? Number(args_port):default_port });
 console.log("Server is running")
