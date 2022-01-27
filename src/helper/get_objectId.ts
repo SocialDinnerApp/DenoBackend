@@ -1,9 +1,10 @@
-import {Context, helpers, RouterContext} from "https://deno.land/x/oak/mod.ts";
-import { verify, decode } from "https://deno.land/x/djwt/mod.ts";
+import {Context} from "https://deno.land/x/oak/mod.ts";
+import { verify } from "https://deno.land/x/djwt/mod.ts";
 import key from "../../key.ts";
 
 export class GetId {
 
+    // return objectId of organizer
     public async objectId(headers: Headers, ctx: Context) {
 
         // make sure that authorization is not null
