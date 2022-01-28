@@ -103,7 +103,7 @@ export class API {
         let dict = {
           eventId: _event.toString(),
           name: event.name,
-          value: revenue,
+          value: revenue*2,
         };
         relevant_information.push(dict);
       } else {
