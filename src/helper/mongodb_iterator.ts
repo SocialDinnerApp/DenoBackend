@@ -12,7 +12,7 @@ export class Iterator {
         let dates: any = [];
 
         const newDate = new Date(this.today);
-        let date_before = new Date(newDate.setDate(newDate.getDate() - start_Date));
+        let date_before = new Date(newDate.setDate(newDate.getDate() - start_Date+1));
         
         for(let count=0; count<start_Date;){
             var counter = 0

@@ -50,7 +50,7 @@ export class API {
       }
     }
 
-    let dict = { revenue: revenue };
+    let dict = { revenue: revenue*2 };
     organizer_revenue.push(dict);
 
     ctx.response.status = 200
