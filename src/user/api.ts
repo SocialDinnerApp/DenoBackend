@@ -69,6 +69,7 @@ export class OrganizerAPI {
       response.body = {
         message: "Incorrect password!",
       }
+      return
     }
     
     // generate jwt
