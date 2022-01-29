@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.97.0/testing/asserts.ts";
 import { Iterator } from "./mongodb_iterator.ts"
-import db from "../mongodb/mongodb.ts";
+import db from "../../mongodb/mongodb.ts";
 
 
 const event_participation = db.collection("event_participation");
