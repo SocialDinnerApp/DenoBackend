@@ -21,15 +21,15 @@ router
     .post('/organizer/login', organizerAPI.login)
     .post('/organizer/register', organizerAPI.register)
     .post('/organizer/logout', organizerAPI.logout)  
-    .get('/organizer/allevents', eventAPI.getAllEvents)
-    .get('/organizer/event/:id', eventAPI.getSingleEvent)
-    .put('/organizer/update/event/:id', organizerAPI.validateToken, eventAPI.updateEvent)
-    .post('/organizer/create/event', eventAPI.createEvent)
+    .get('/organizer/allevents', organizerAPI.validateToken, eventAPI.getAllEvents)
+    .get('/organizer/event/:id', organizerAPI.validateToken, eventAPI.getSingleEvent)
+    .put('/organizer/update/event/:id', organizerAPI.validateToken, organizerAPI.validateToken, eventAPI.updateEvent)
+    .post('/organizer/create/event', organizerAPI.validateToken, eventAPI.createEvent)
     .put('/organizer', organizerAPI.validateToken, organizerAPI.updateUser)
-    .get('/organizer', organizerAPI.userInformation)
-    .get('/organizer/visuals/revenue', api.getAllParticipants)
-    .get('/organizer/visuals/partlastsevenevents', api.partLastSevenEvents)
-    .get('/organizer/visuals/partsingleevent/:id', api.partSingleEvent)
+    .get('/organizer', organizerAPI.validateToken, organizerAPI.userInformation)
+    .get('/organizer/visuals/revenue', organizerAPI.validateToken, api.getAllParticipants)
+    .get('/organizer/visuals/partlastsevenevents', organizerAPI.validateToken, api.partLastSevenEvents)
+    .get('/organizer/visuals/partsingleevent/:id', organizerAPI.validateToken, api.partSingleEvent)
 
 const app = new Application();
 
