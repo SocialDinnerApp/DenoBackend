@@ -9,6 +9,7 @@ export class GetId {
 
         // make sure that authorization is not null
         const authorization = headers.get("Authorization");
+        console.log(authorization)
         if (!authorization) {
         ctx.response.status = 401;
         return;
