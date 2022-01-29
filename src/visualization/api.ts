@@ -90,7 +90,6 @@ export class API {
 
     for (const event of last_events) {
       let _event = event._id;
-      let fee = event.fee;
       const docs = (await this.event_participation
         .aggregate([
           { $match: { eventId: _event.toString() } },
@@ -99,11 +98,10 @@ export class API {
         .toArray()) as any;
       if (Object.keys(docs).length != 0) {
         let count = docs[0].total;
-        let revenue = fee * count;
         let dict = {
           eventId: _event.toString(),
           name: event.name,
-          value: revenue*2,
+          value: count*2
         };
         relevant_information.push(dict);
       } else {
