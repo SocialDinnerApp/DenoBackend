@@ -4,7 +4,7 @@ This Deno backend is used for an organizer on Gatsby to create events. <br> It h
 
 ## Background
 
-The idea for the project arose from the "Fallstudie" subject and was intended as an extension to offer organizers (e.g. faculties) a website to create events for our Gatsby Application. For the subject "Web-Programming", a new and complete backend was realized using Deno & TypeScript, despite the existing Flask backend (tbf [here](https://github.com/SocialDinnerApp/Backend)), which was implemented for the Application. The aim was, besides the challenge of dealing with a non-relational database, to also learn how to use Deno.
+The idea for the project arose from the "Fallstudie" subject and was intended as an extension to offer organizers (e.g. faculties) a website to create events for our Gatsby Application. For the subject "Web-Programming", a new and complete backend was realized using Deno & TypeScript, despite the existing Flask backend (tbf [here](https://github.com/SocialDinnerApp/Backend)), which was implemented for the Application. The aim was, besides the challenge of dealing with a non-relational database, to learn how to use Deno. Next to the sole development of the backend, we suppoted the frontend-team on the design of the Website. Additionally, we created a possibility for the frontend to receive the needed responses in the required way. 
 
 ### Done
  - [x] Developed complete backend (TypeScript) including following routes:
@@ -14,18 +14,21 @@ The idea for the project arose from the "Fallstudie" subject and was intended as
       - getSingleEvent --> to show event information in the frontend
       - validateToken --> to check if the organizer's token exists & is not expired
       - database aggregation to receive:<br>
-        - event revenue
-        - participations in a certain timeframe
-        - last seven organizer events including revenue
+        - event revenue, depending on the individual fee of the event & its participations
+        - count of participations for a certain timeframe (in our case: last 30 days) aggregated over 5 day blocks
+        - last seven (or less) events of a particular organizer including the number of participations
+ - [x] evaluated different database third-party-modules including: [sqlite](https://deno.land/x/sqlite@v3.2.0), [mysql](https://deno.land/x/mysql@v2.10.2), [postgres](https://deno.land/x/postgres@v0.15.0) & [mongodb](https://deno.land/x/mongo@v0.29.1)
  - [x] setting up mongodb connection
- - [x] design implementation of non-relational data-model for all entities & creating testing data
- - [x] created suitable responses for the frontend
+ - [x] design implementation of non-relational data-model for all entities 
+ - [x] creating data to test the frontend & backend compatibility
+    - different organizers, events, participants & event participations
+ - [x] created suitable routes & responses for the frontend
  - [x] creating and verifying JSON Web Tokens to restrict unauthorized access
  - [x] working with interfaces in TypeScript
  - [x] hashing passwords with bcrypt
  - [x] implemented helper functions to fulfill the __DRY-Principle__
  - [x] implemented a few unit-tests
- - [x] deployed backend to heroku
+ - [x] deployed backend to heroku, as well as needed env-variables
 
 ## Challenges
 
@@ -50,7 +53,7 @@ __djwt:__ https://deno.land/x/djwt@v2.4 <br>
 __bcrypt:__ https://deno.land/x/bcrypt@v0.3.0 <br>
 __testing:__ https://deno.land/std@0.97.0/testing
 
-## YouTube Videos & Websites <br>
+## YouTube Videos <br>
 __Deno & Typescript__ <br>
 * [Deno Crash Course](https://www.youtube.com/watch?v=NHHhiqwcfRM&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=17)<br>
 * [RestAPI with Deno](https://www.youtube.com/watch?v=Hi1Xen0H_HI&list=PL9Q8sSLWvSenWR6lcA9_4ka6A_WZpUS8l&index=1)<br>
